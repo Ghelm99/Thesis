@@ -56,7 +56,7 @@ def main():
     path = look_for_right_path()
     print(f"Selected path: {path}")
     if path is None:
-        print("No suitable temperature sensor found. Exiting.")
+        print("No suitable vcore sensor found. Exiting.")
         return
 
     if len(sys.argv) > 1:
