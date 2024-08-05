@@ -1,0 +1,9 @@
+# Ignore all thesis.* files
+thesis.*
+
+# Do not ignore thesis.tex
+!thesis.tex
+
+# Do not ignore thesis.pdf
+!thesis.pdf
+
