@@ -1,0 +1,48 @@
+\thispagestyle{empty}
+
+\newgeometry{twoside = false, width = \paperwidth - 4cm, bottom = 0cm}
+\setlength{\baselineskip}{6mm}
+
+\begin{center}
+  \includegraphics[width=0.4\textwidth]{assets/unipv_logo.png}\par\vspace{0.5cm} 
+
+  \vspace{2mm}
+  {\fontsize{5mm}{6mm}\selectfont\textbf{\uppercase{\textls[100]{University of Pavia}}}}
+
+  \vspace{-.5mm}
+  \fontsize{4.2mm}{6mm}
+  \textsc{Faculty of Engineering}\\
+  \textsc{Department of Electrical, Computer and Biomedical Engineering}
+
+  \vspace{2mm}
+  \textsc{Master's degree in Computer Engineering}
+
+  \vspace{20mm}
+  \PRLsep{\uppercase{Master Thesis}}{.5pt}
+
+  \vspace{-7.5mm}
+  \begin{spacing}{2}
+    {\fontsize{6.5mm}{8mm}\selectfont\textbf{\textit{\thesistitle}}}
+  \end{spacing}
+\end{center}
+
+
+\vspace{30mm}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{ l l }
+  \emph{Candidate}: & \candidate \\
+  \emph{Supervisor}: & \supervisor
+\end{tabular}
+\renewcommand{\arraystretch}{1}
+
+\vspace{20mm}
+\begin{center}
+  Academic Year 2023/2024
+\end{center}
+
+\restoregeometry
+
+\let\tempmargin\oddsidemargin
+\let\oddsidemargin\evensidemargin
+\let\evensidemargin\tempmargin
+\reversemarginpar

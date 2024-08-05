@@ -1,0 +1,14 @@
+% "\PRLsep" - PRL style horizontal line with text
+% https://tex.stackexchange.com/a/212610
+\newlength{\PRLlen}
+\newcommand*\PRLsep[2]{\settowidth{\PRLlen}{#1}\advance\PRLlen by
+-\textwidth\divide\PRLlen by
+-2\noindent\makebox[\the\PRLlen]{\resizebox{\the\PRLlen}{#2}{$\blacktriangleleft$}}\raisebox{-.5ex}{#1}\makebox[\the\PRLlen]{\resizebox{\the\PRLlen}{#2}{$\blacktriangleright$}}\bigskip}
+
+% TODOs shortcuts
+\newcommand*\todog[1]{\todo[color=green!50]{#1}}
+\newcommand*\todoy[1]{\todo[color=orange!50]{#1}}
+\newcommand*\todor[1]{\todo[color=red!50]{#1}}
+
+% Full citation with year
+\newcommand*\textciteyear[1]{\citeauthor{#1}~(\citeyear{#1})~\cite{#1}}

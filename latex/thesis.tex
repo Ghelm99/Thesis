@@ -1,0 +1,52 @@
+\documentclass[11pt,a4paper]{report}
+\input{./includes/packages.tex}
+\input{./includes/commands.tex}
+\input{./includes/acronyms.tex}
+\makeglossaries
+
+\def\candidate{Andrea Galmuzzi}
+\def\supervisor{Prof. Maria Carla Calzarossa}
+\def\thesistitle{My title}
+
+\addbibresource{bibliography/prova.bib}
+
+\begin{document}
+
+\input{pages/title.tex}
+
+\ifnum\totvalue{@todonotes@numberoftodonotes}>0
+  \pagenumbering{gobble}
+  \listoftodos  
+\fi
+
+\input{pages/abstract.tex}
+
+\clearpage
+\pagenumbering{Roman}
+\tableofcontents
+\begingroup
+\setlength\baselineskip{20pt}
+\listoffigures
+\listoftables
+\endgroup
+
+\pagestyle{fancy}
+
+\clearpage
+\pagenumbering{arabic}
+\input{chapters/1_introduction.tex}
+
+\begingroup
+\clearpage
+\pagestyle{plain}
+\input{pages/acknowledgements.tex}
+\clearpage
+\endgroup
+
+\glsfindwidesttoplevelname
+\setglossarystyle{alttree}
+\printglossary[type=acronym]
+
+\printbibliography
+
+\end{document}

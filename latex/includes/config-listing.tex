@@ -1,0 +1,128 @@
+% Define some colors
+\definecolor{codebg}{rgb}{0.97,0.97,0.97}
+\definecolor{codebgout}{rgb}{0.98,0.98,0.98}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codeout}{rgb}{0.4,0.4,0.4}
+\definecolor{orange900}{RGB}{230, 81, 0}
+\definecolor{green800}{HTML}{2e7d32}
+\definecolor{pink600}{HTML}{d81b60}
+
+\newcommand\lstbasestyle{\linespread{1.2}\ttfamily\footnotesize}
+
+% Default listing style
+\lstdefinestyle{th-default}{
+  backgroundcolor=\color{codebg},
+  rulecolor=\color{codebg},
+  commentstyle=\slshape\color{codegray},
+  keywordstyle=\color{teal},
+  numberstyle=\tiny\ttfamily\color{darkgray},
+  stringstyle=\color{orange900},
+  basicstyle=\lstbasestyle,
+  breakatwhitespace=false,
+  extendedchars=true,
+  breaklines=true,
+  captionpos=b,
+  keepspaces=true,
+  numbers=left,
+  numbersep=10pt,
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  tabsize=2,
+  frame=tb,
+  xleftmargin=24pt,
+  framexleftmargin=24pt,
+  framexrightmargin=5pt,
+  framexbottommargin=4pt,
+  framextopmargin=4pt,
+  aboveskip=16pt,
+  belowskip=8pt
+}
+
+% Listing styles for command + output
+\lstdefinestyle{th-cmd}{
+  style=th-default,
+  belowskip=0pt,
+  framexbottommargin=0pt,
+  nolol=true,
+  language=bash,
+  morekeywords={head,grep,zcat}
+}
+\lstdefinestyle{th-cmdout}{
+  style=th-default,
+  backgroundcolor=\color{codebgout},
+  aboveskip=0pt,
+  basicstyle=\lstbasestyle\itshape\color{codeout},
+  numbers=none,
+  xleftmargin=30pt,
+  framexleftmargin=30pt,
+  framextopmargin=0pt
+}
+
+% Set default listing style
+\lstset{style=th-default}
+
+
+% YAML language definitions (https://tex.stackexchange.com/a/152856)
+
+\newcommand\YAMLkeystyle{\lstbasestyle}
+\newcommand\YAMLcolonstyle{\color{purple}}
+\newcommand\YAMLvaluestyle{\color{orange900}}
+
+\makeatletter
+
+\newcommand\language@yaml{yaml}
+
+\expandafter\expandafter\expandafter\lstdefinelanguage
+\expandafter{\language@yaml}
+{
+  keywords={true,false,null,y,n},
+  keywordstyle=\color{teal},
+  basicstyle=\YAMLkeystyle,  % assuming a key comes first
+  sensitive=false,
+  comment=[l]{\#},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\slshape\color{codegray},
+  stringstyle=\YAMLvaluestyle,
+  moredelim=[l][\color{green800}]{\&},
+  moredelim=[l][\color{pink600}]{*},
+  moredelim=**[il][\YAMLcolonstyle{:}\YAMLvaluestyle]{:},  % switch to value style at :
+  morestring=[b]',
+  morestring=[b]",
+  literate =    {---}{{\ProcessThreeDashes}}3
+                {>}{{\textcolor{red}\textgreater}}1
+                {|}{{\textcolor{red}\textbar}}1
+                {\ -\ }{{\mdseries\ -\ }}3,
+}
+
+\lst@AddToHook{EveryLine}{\ifx\lst@language\language@yaml\YAMLkeystyle\fi}
+\makeatother
+
+\newcommand\ProcessThreeDashes{\llap{\color{cyan}\mdseries-{-}-}}
+
+
+% JSON language support
+
+\lstdefinelanguage{json}{
+    basicstyle=\lstbasestyle,
+    commentstyle=\slshape\color{codegray},
+    stringstyle=\color{orange900},
+    stepnumber=1,
+    showstringspaces=false,
+    breaklines=true,
+    frame=lines,
+    string=[s]{"}{"},
+    comment=[l]{:\ "},
+    morecomment=[l]{:"},
+    literate=
+        *{0}{{{\color{numb}0}}}{1}
+         {1}{{{\color{numb}1}}}{1}
+         {2}{{{\color{numb}2}}}{1}
+         {3}{{{\color{numb}3}}}{1}
+         {4}{{{\color{numb}4}}}{1}
+         {5}{{{\color{numb}5}}}{1}
+         {6}{{{\color{numb}6}}}{1}
+         {7}{{{\color{numb}7}}}{1}
+         {8}{{{\color{numb}8}}}{1}
+         {9}{{{\color{numb}9}}}{1}
+}

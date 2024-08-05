@@ -1,0 +1,194 @@
+%Typographic enhancements
+\usepackage[final,nopatch=footnote]{microtype}
+
+% To use the larger set of chars provided by modern fonts
+\usepackage[T1]{fontenc}
+
+% Document locale
+\usepackage[main=english,italian]{babel}
+
+% Change font
+\usepackage{charter}  
+\usepackage[scaled]{beramono}
+\linespread{1.08} 
+
+% Use arithmetic in commands
+\usepackage{calc}
+
+% Math symbols
+\usepackage{amssymb}
+
+% For confusion matrix and cell padding in some tables
+\usepackage{multirow}
+\usepackage{makecell}
+
+% For better tables
+%\usepackage{booktabs}
+
+% To display image sources
+\usepackage{stackengine}
+
+% Improved handling of appendices
+%\usepackage[toc]{appendix}
+
+% Captions style
+\usepackage[font=small,labelfont={bf,sc},textfont=it]{caption}
+
+% Page layout customization
+% !! add 'twoside' even-odd margins
+\usepackage[width=13cm]{geometry}  
+
+% Environments to customize line height
+\usepackage{setspace}
+
+% Hyphenation of monospace text
+% \usepackage[htt]{hyphenat}
+
+% Small caps, bold titles
+\usepackage[bf,sc,raggedright]{titlesec}  % raggedright avoids hyphenation of titles
+\titleformat{\section}
+  {\vspace{2ex}\itshape\bfseries\Large}
+  {\thesection}
+  {.5em}
+  {}
+
+% Fancy headers and footers
+\usepackage{fancyhdr}
+\fancyhf[HLO]{\textsc{\nouppercase{\leftmark}}}
+\fancyhf[HL,HRO]{\textit{\thepage}}
+\fancyhf[HR,F]{}
+\renewcommand{\headrulewidth}{0.5pt}
+\setlength{\headheight}{14pt}
+
+% Change format of list of figures/tables
+% \usepackage{tocloft}
+
+% Display quotations
+\usepackage{csquotes}
+
+% Raster images support
+\usepackage{graphicx}
+\graphicspath{{./assets/}}
+
+% SVG images support (requires Inkscape)
+\usepackage[inkscapepath=./latexbuild/inkscape,inkscapeversion=1.3.2]{svg}
+\svgpath{{./assets/}}
+
+% Temporarily change margins for a page (for TSNE plots)
+\usepackage{chngpage}
+
+% URL support
+% (also included by hyperref but here we explicitly set to break on hyphens too)
+\usepackage[hyphens]{url}
+\urlstyle{sf}
+
+% Clickable hyperlinks
+\usepackage[hidelinks]{hyperref}
+
+% Handle bibliography with BibLaTeX
+\usepackage[
+  backend=biber,
+  style=numeric-comp,
+  bibstyle=trad-unsrt,
+  sorting=none,
+  maxcitenames=2,
+  maxbibnames=5,
+  minbibnames=5,
+  urldate=long,
+  doi=false,
+  isbn=false,
+  giveninits,
+  backref=false
+]{biblatex}
+
+% Space between bibliography entries
+\setlength\bibitemsep{2.0\itemsep}
+
+% Break URLs in bibliography
+\setcounter{biburlnumpenalty}{5000}  % after numbers
+\setcounter{biburllcpenalty}{7000}   % after lowercase letters
+\setcounter{biburlucpenalty}{8000}   % after uppercase letters
+
+% Do not put page breaks between bibliography entries
+% https://tex.stackexchange.com/a/43275
+\patchcmd{\bibsetup}{\interlinepenalty=5000}{\interlinepenalty=10000}{}{}
+
+\newcommand*\bibmetafield[2]
+  {\\\small\color{darkgray}\mkbibbold{\mkbibacro{#1}}\addcolon\space\sffamily#2\nopunct}
+
+% ISBN, DOI and URL style
+\DefineBibliographyStrings{english}{
+  urlseen = {visited on}
+}
+\DeclareFieldFormat{isbn}{\bibmetafield{ISBN}{#1}}
+\DeclareFieldFormat{doi}{\bibmetafield{DOI}{\href{https://doi.org/#1}{#1}}}
+\DeclareFieldFormat{url}{\bibmetafield{URL}{\url{#1}}}
+\DeclareFieldFormat{urldate}
+  {\small\color{darkgray}\itshape(\bibstring{urlseen}\space#1)\nopunct}
+
+% Backref on newline - https://tex.stackexchange.com/a/76136
+\renewcommand*{\finentrypunct}{}
+\renewbibmacro*{pageref}{%
+  \addperiod%
+  \iflistundef{pageref}
+    {}
+    {\newline\footnotesize\printtext[parens]{%
+       \ifnumgreater{\value{pageref}}{1}
+         {\bibstring{backrefpages}\ppspace}
+    {\bibstring{backrefpage}\ppspace}%
+       \printlist[pageref][-\value{listtotal}]{pageref}}}}
+
+% List customization, with inline support (use "enumerate*" environment)
+\usepackage[inline]{enumitem}
+
+% Allow to break hyphenated words by using \-/
+% https://stackoverflow.com/a/8649145
+\usepackage[shortcuts]{extdash}
+
+% Code listings
+\usepackage{listings}
+\input{includes/config-listing.tex}
+
+% Fix line breaks in URLs with DVI output
+%\usepackage[hyphenbreaks]{breakurl}
+
+% Newline paragraph style
+\usepackage[skip=10pt]{parskip}
+
+% Reference with type (e.g. print "Figure 1.1" instead of only "1.1")
+\usepackage{prettyref}
+\newrefformat{sec}{Section~\ref{#1}}
+\newrefformat{tab}{Table~\ref{#1}}
+\newrefformat{fig}{Figure~\ref{#1}}
+\newrefformat{lst}{Listing~\ref{#1}}
+%\newrefformat{app}{Appendix \ref{#1}}
+
+% Make sure acronyms are spelled out at least once
+\usepackage[acronyms,shortcuts,nogroupskip,nopostdot]{glossaries}
+\setacronymstyle{long-short}
+
+% Let full acronyms set the first use flag
+\renewcommand\acf[1]{\ifglsused{#1}{\acrfull{#1}}{\gls{#1}}}
+\renewcommand\acfp[1]{\ifglsused{#1}{\acrfullpl{#1}}{\glspl{#1}}}
+
+% To-do notes
+\usepackage[textwidth=3.5cm,colorinlistoftodos,textsize=footnotesize]{todonotes}
+\setlength{\marginparwidth}{3.5cm}
+
+% Changebar for latexdiff
+\usepackage[pdftex,color]{changebar}
+\definecolor{blue400}{HTML}{42a5f5}
+\definecolor{blue800}{HTML}{1565c0}
+\definecolor{deeporange400}{HTML}{ff7043}
+\definecolor{deeporange800}{HTML}{d84315}
+
+\setlength\changebarwidth{2mm}
+\setlength\changebarsep{1.5cm}
+
+% Latexdiff color configuration
+\providecommand{\DIFaddtex}[1]{\cbcolor{blue400}\protect\cbstart{\protect\color{blue800}\uwave{#1}}\protect\cbend}
+\providecommand{\DIFdeltex}[1]{\cbcolor{deeporange400}\protect\cbstart{\protect\color{deeporange800}\sout{#1}}\protect\cbend}
+
+% Compute and display counters in project
+\usepackage{totcount}
+\regtotcounter{@todonotes@numberoftodonotes}

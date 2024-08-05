@@ -1,0 +1,10 @@
+docker run \
+	-e container_role=sender \
+	-e channel_type=Temp \
+	-e adjust_timeout_allocation=1 \
+	-e sync_time_s=20 \
+	-e allocation_time_s=5 \
+	-e allocation_factor=0.8 \
+	-e message=secret \
+	-e verbose=1 \
+	-t dockerchannel
