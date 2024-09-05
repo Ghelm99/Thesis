@@ -1,29 +1,30 @@
 %Typographic enhancements
 \usepackage[final,nopatch=footnote]{microtype}
 
+% Change font
+% \usepackage{charter}  
+% \usepackage[scaled]{beramono}
+\usepackage{newtxtext,newtxmath}
+\linespread{1.5} 
+
 % To use the larger set of chars provided by modern fonts
 \usepackage[T1]{fontenc}
 
 % Document locale
 \usepackage[main=english,italian]{babel}
 
-% Change font
-\usepackage{charter}  
-\usepackage[scaled]{beramono}
-\linespread{1.08} 
-
 % Use arithmetic in commands
 \usepackage{calc}
 
 % Math symbols
-\usepackage{amssymb}
+% \usepackage{amssymb}
 
 % For confusion matrix and cell padding in some tables
 \usepackage{multirow}
 \usepackage{makecell}
 
 % For better tables
-%\usepackage{booktabs}
+\usepackage{booktabs}
 
 % To display image sources
 \usepackage{stackengine}
@@ -35,8 +36,6 @@
 \usepackage[font=small,labelfont={bf,sc},textfont=it]{caption}
 
 % Page layout customization
-% !! add 'twoside' even-odd margins
-\usepackage[width=13cm]{geometry}  
 
 % Environments to customize line height
 \usepackage{setspace}
@@ -45,20 +44,27 @@
 % \usepackage[htt]{hyphenat}
 
 % Small caps, bold titles
-\usepackage[bf,sc,raggedright]{titlesec}  % raggedright avoids hyphenation of titles
-\titleformat{\section}
-  {\vspace{2ex}\itshape\bfseries\Large}
-  {\thesection}
-  {.5em}
-  {}
+\usepackage[sc,raggedright]{titlesec}  % raggedright avoids hyphenation of titles
+% \titleformat{\section}
+%  {\vspace{2ex}}% \itshape\Large
+%  {\thesection}
+%  {.5em}
+%  {}
+
+% Add space before sections and subsections
+\titlespacing*{\section}
+  {0ex}{4ex}{2ex}
+
+\titlespacing*{\subsection}
+  {0ex}{3ex}{1ex}
 
 % Fancy headers and footers
 \usepackage{fancyhdr}
-\fancyhf[HLO]{\textsc{\nouppercase{\leftmark}}}
-\fancyhf[HL,HRO]{\textit{\thepage}}
-\fancyhf[HR,F]{}
-\renewcommand{\headrulewidth}{0.5pt}
-\setlength{\headheight}{14pt}
+\fancyhf{} 
+\fancyhead[LO]{\nouppercase{\leftmark}}
+% \fancyhead[RE]{\nouppercase{\leftmark}}
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt} 
 
 % Change format of list of figures/tables
 % \usepackage{tocloft}
@@ -69,7 +75,6 @@
 % Raster images support
 \usepackage{graphicx}
 \graphicspath{{./assets/}}
-
 % SVG images support (requires Inkscape)
 \usepackage[inkscapepath=./latexbuild/inkscape,inkscapeversion=1.3.2]{svg}
 \svgpath{{./assets/}}
@@ -114,7 +119,7 @@
 \patchcmd{\bibsetup}{\interlinepenalty=5000}{\interlinepenalty=10000}{}{}
 
 \newcommand*\bibmetafield[2]
-  {\\\small\color{darkgray}\mkbibbold{\mkbibacro{#1}}\addcolon\space\sffamily#2\nopunct}
+  {\\\small\color{darkgray}{\mkbibacro{#1}}\addcolon\space\sffamily#2\nopunct}
 
 % ISBN, DOI and URL style
 \DefineBibliographyStrings{english}{
@@ -122,7 +127,7 @@
 }
 \DeclareFieldFormat{isbn}{\bibmetafield{ISBN}{#1}}
 \DeclareFieldFormat{doi}{\bibmetafield{DOI}{\href{https://doi.org/#1}{#1}}}
-\DeclareFieldFormat{url}{\bibmetafield{URL}{\url{#1}}}
+\DeclareFieldFormat{url}{\bibmetafield{}{\url{#1}}}
 \DeclareFieldFormat{urldate}
   {\small\color{darkgray}\itshape(\bibstring{urlseen}\space#1)\nopunct}
 
@@ -192,3 +197,9 @@
 % Compute and display counters in project
 \usepackage{totcount}
 \regtotcounter{@todonotes@numberoftodonotes}
+
+% By Galmu
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{makecell}
+\usepackage[bindingoffset=15mm,left=3cm,right=3cm,top=3cm,bottom=3cm,headheight=15mm]{geometry}
