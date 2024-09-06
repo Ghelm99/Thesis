@@ -23,19 +23,33 @@ In this scenario, the 1968 NATO Software Engineering Conference, held in Garmisc
 
 \newpage
 At the end of the past century, the widespread adoption of both new and mature technologies and paradigms completely re-shaped the software production landscape. From the development standpoint, the Waterfall model was limited to critical and real-time projects, giving way to more flexible development methodologies on the commercial side, such as spiral \cite{boehm1988spiral}, RAD (Rapid Application Development) \cite{martinRapidApplicationDevelopment1991} and Agile \cite{ManifestoAgileSoftware}. 
-From the deployment standpoint, the diffusion of Internet and Linux-based virtualization technologies allowed the creation of remote server networks, giving birth to new cloud-based models, such as SaaS (Software as a Service), PaaS (Platform As a Service) and IaaS (Infrastructure as a Service) \cite{manvi2014resource}. With the flourishing of cloud computing, the monolithic deployment model was gradually abandoned in favor of more flexible and scalable architectures. This trend was further accelerated by the diffusion of containerization technologies:  applications began to be deployed as a set of isolated, loosely coupled microservices, communicating through APIs and hosted on cloud-based, multi-tenant environments.
+From the deployment standpoint, the diffusion of Internet and Linux-based virtualization technologies allowed the creation of remote server networks, giving birth to new cloud-based models, such as Software as a Service (SaaS), Platform As a Service (PaaS) and Infrastructure as a Service (IaaS) \cite{manvi2014resource}. With the flourishing of cloud computing, the monolithic deployment model was gradually abandoned in favor of more flexible and scalable architectures. This trend was further accelerated by the diffusion of containerization technologies:  applications began to be deployed as a set of isolated, loosely coupled microservices, communicating through APIs and hosted on cloud-based, multi-tenant environments.
 This result was achieved at the end of a long journey, started in 1979 with the introduction of the \texttt{chroot} system call \cite{kerriskLinuxProgrammingInterface2010} during UNIX Version 7 development. FreeBSD Jails \cite{kampJailsConfiningOmnipotent}, Solaris Zones \cite{priceSolarisZonesOperating2004} and Linux Containers \cite{LinuxContainers} are the most relevant milestones towards the creation of modern container-based process isolation techniques.
 
 Nowadays, Docker is the de facto standard for containerization. It was introduced on March 15, 2013, by Solomon Hykes, founder and CEO of a PaaS company called dotCloud, during the annual Python Developers Conference in Santa Clara, California \cite{hykesLightningTalkFuture2013}. Docker was an immediate success: the project's source code was released on GitHub as open-source, quickly gaining the attention of the software development community.
 In 2013, dotCloud focused its efforts on the development and support of the Docker project, changing its name to Docker Inc. In June 2015, the Open Container Initiative (OCI) \cite{OpenContainerInitiative} was founded by the major key players in the container industry with the goal of creating open industry standards.
 
-Over the last decade, Docker has radically changed the way software is developed and deployed on the cloud. By promoting the adoption of microservices, it fostered the transition from traditional software engineering to DevOps practices: development and operation teams are not strictly separated anymore, but work closer with the goal of improving software quality and delivery speed.
+Over the last decade, Docker has radically changed the way software is developed and deployed on the cloud. By promoting the adoption of microservices, it fostered the transition from traditional software engineering to DevOps practices: development and operations teams are not strictly separated anymore, but work closer with the goal of improving software quality and delivery speed.
 To achieve this goal, software development and deployment have become even more connected and automated: pipelines of Continuous Integration and Deployment (CI/CD) have become simpler, allowing production teams to test and release the software faster. 
 Besides the benefits, the adoption of Docker containers has also brought new security challenges and risks, especially regarding container isolation in multi-tenancy cloud deployments \cite{luo2016whispers,gao2018study}.
 These problems gave birth to container security as a new cybersecurity field and are still the subject of active research.
 
 \section{Linux operating system architecture}
-Linux is by far the most popular operating system in the server market, powering the vast majority of cloud-based services. This success is due to a large number of diverse factors, such as its open-source nature, its adaptability to different hardware architectures, its high performance and security level, etc. Among these factors, the diffusion of virtualization and containerization has played a significant role in its adoption for enterprise solutions. For this reason, Linux is taken as the operating system of reference in the discussion that follows.
+By being open-source, highly performant and secure, 
+Linux is by far the most popular operating system in the server market. The diffusion of virtualization and containerization technologies boosted its adoption for enterprise solutions, making it the OS of choice when deploying applications in cloud environments.
+
+Figure \ref{fig:linux_os_structure} provides a high-level overview of the Linux OS architecture.
+Starting from the top of the diagram, users interact with the operating system though the user interface layer, which includes Graphical User Interfaces (GUIs), Command Line Interfaces (CLIs) and batch interfaces. GUIs provide elements for user visual interaction, such as windows, icons, buttons and menus. CLIs implement the command-based user interaction by allowing users to launch commands and scripts. Batch interfaces allow users to schedule command execution at specific times or conditions.
+The user interface layer is the outermost user space layer and allows users to interact with both system and installed applications.
+The term "user space" refers to the memory area where unprivileged user applications are run. 
+User space applications are said to be running in "user mode", meaning they have constrained access to system resources and are prevented from executing critical operations that could compromise system's stability and security. \newline
+Right below the user interface layer, shell interpreters connect CLIs and batch interfaces to the application layer by interpreting and executing commands.
+The application layer includes both system and user-installed applications, running in user mode. Right below this layer, the process layer includes all active user processes, namely all instances of running applications. System libraries are shared among all processes and provide a high-level programming interface to kernel functionalities. 
+Below system libraries, the diagram depicts the kernel space, namely the memory area that hosts the operating system kernel and its modules. 
+The kernel is the software component that acts as the core of the operating system, handling the vast majority of critical tasks such as process scheduling, memory and filesystem management, I/O operation handling and security enforcement.
+Kernel space software runs in "kernel mode", meaning it has full access to system resources and can execute privileged operations.
+The first kernel space layer, namely the system call interface, provides an abstraction layer between user and kernel space. It allows user processes - running in user mode - to access kernel functionalities in a secure and predefined way.
+At the lowest level, architecture-dependent kernel code allows the kernel to interact with the underlying hardware, including all the host physical components.
 
 \begin{figure}[htbp]
     \vspace{10pt}
@@ -46,30 +60,17 @@ Linux is by far the most popular operating system in the server market, powering
     \vspace{10pt}
 \end{figure}
 
-Figure \ref{fig:linux_os_structure} provides a high-level overview of the Linux OS architecture.
-Starting from the top of the diagram, users interact with the operating system though the user interface layer, which includes Graphical User Interfaces (GUIs), Command Line Interfaces (CLIs) and batch interfaces. GUIs provide elements for user visual interaction, such as windows, icons, buttons and menus. CLIs provide tools for text and command-based user interaction, allowing users to launch commands and scripts. Batch interfaces allow users to schedule commands to be executed at specific time or conditions.
-User interfaces are the outermost user space layer and allow users to interact with both system and installed applications.
-The term "user space" refers to the memory area where unprivileged user applications reside. 
-Applications running in the user space are said to be running in "user mode", meaning they have limited access to system resources and are prevented from executing operations that could compromise the system's stability and security. \newline
-Right below the user interface layer, shell interpreters connect CLIs and batch interfaces to the application layer by interpreting and executing commands.
-The application layer includes both system and user-installed applications, running in user mode. Right below this layer, the process layer includes all active user processes, namely all instances of running applications. 
-The process layer relies on system libraries as a simple, high-level programming interface to kernel functionalities. 
-Below system libraries, the diagram depicts the kernel space, which is the memory area where the kernel and its modules reside. The kernel acts as the core of the operating system, handling a wide range of critical tasks such as process scheduling, memory, file system and device management, I/O operation handling, network and inter-process communication management, system security enforcement, etc.
-Software running in the kernel space runs in "kernel mode", meaning it has full access to system resources and can execute privileged operations.
-The first kernel space layer is the system call interface, which serves as the abstraction layer between user and kernel space, providing a clean and secure way for user processes - running in user mode - to access kernel functionalities.
-The OS kernel relies on architecture-dependent code to interact with the underlying hardware layer, which includes all the host physical components, such as the CPU, memory, storage and network interfaces.
-
 \section{Traditional application deployment}
-Before the diffusion of virtual machines and containers, software deployment was a time-consuming process involving several steps and a lot of communication efforts between IT development and operation teams. 
+Before the diffusion of virtual machines and containers, software deployment was a time-consuming process involving several steps and a lot of communication efforts between IT development and operations teams. 
 This complexity posed big limits to innovation, reducing software delivery speed and quality: if deploying new software is hard, developers may be tempted to avoid solving problems that require new development efforts \cite{kaneDockerRunningShipping2023}.
 The discussion that follows complements figure \ref{fig:traditional_deployment} in describing an old-fashion software deployment pipeline.
 \begin{enumerate}
-    \item Developers request available deployment resources to the operation team, specifying application requirements.
-    \item Resources are set up and provisioned by the operation team.
+    \item Developers request available deployment resources to the operations team, specifying application requirements.
+    \item Resources are set up and provisioned by the operations team.
     \item Developers script the deployment process, including application configuration and dependencies installation.
-    \item Operation engineers and developers tweak the deployment script until the application is deployed as expected in a testing environment.
+    \item Operations engineers and developers tweak the deployment script until the application is deployed as expected in a testing environment.
     \item Necessary changes in the application deployment are discovered by developers, such as new configuration parameters or additional dependencies. 
-    \item The operation team work to fullfil the new deployment requirements.
+    \item The operations team work to fullfil the new deployment requirements.
     \item Steps from 4 to 6 are repeated as needed.
     \item The application is deployed to production environments.
 \end{enumerate}
@@ -128,7 +129,7 @@ Although more flexible and less expensive than the IaaS model, PaaS deployments 
     \vspace{10pt}
     \centering
     \includegraphics{assets/iaas_paas_saas.pdf}
-    \caption{IaaS, PaaS and SaaS cloud models. In red, components managed by cloud providers, in green, components managed by customers.}
+    \caption{IaaS, PaaS and SaaS cloud models.}
     \label{fig:iaas_paas_saas}
     \vspace{10pt}
 \end{figure}
@@ -215,66 +216,114 @@ By initially extending LXC and then transitioning to \texttt{libcontainer}, Dock
 Container images are the backbone of the entire Docker ecosystem. They are artifacts acting as templates for container instantiation. Images usually contain the OS filesystem, the application component to be deployed and all the dependencies it needs to be run in isolation. 
 They are similar to VM templates and may recall Object Oriented Programming classes from which objects (Docker containers) are instantiated.
 Their real potential is unleashed when shared between several users and environments through Docker registries, namely public or private repositories where Docker images are made available for download.
-The most famous public registry is Docker Hub, an online repository backed by Docker Inc. and sustained by an extensive community of developers. 
+The most famous public registry is Docker Hub, an online repository backed by Docker Inc. and sustained by an extensive community of developers. \newline
 The addition of images and registries can be considered as the major extension offered by Docker to the LXC technology and the main reason for its widespread adoption.
-By pulling the same image from a registry, developers and operation engineers can create identical containers, ensuring that the application component packed in the image will run consistently on any machine.
-This possibility is crucial in the deployment process since it allows to solve the "it works on my machine" problem, a common issue in software production where the application runs correctly on a particular testing environment but fails in production due to different configuration or dependencies profiles. 
+By pushing and pulling the same image from a registry, developers and operations engineers can create identical containers, ensuring that the application component packed in the image will run consistently on any testing or production environment.
+This possibility is crucial in the deployment process since it allows to solve the "it works on my machine" problem, a common issue in software production where the application runs correctly on a particular machine but fails in production due to different configuration or dependencies profiles. 
 
 \subsection{Docker architecture}
-Figure \ref{fig:docker_architecture} provides a high-level overview of the Docker architecture. The diagram shows a Docker client, a Docker host and a Docker registry. All these entities can be located on the same physical machine or not. In a nutshell, Docker works as a client-server architecture where all these components interact with each other through REST APIs.
-The Docker host is the core of the entire architecture, namely the system in which containers are run. This component hosts the container engine (daemon) and runtime, made of several user space processes responsible for managing the entire container lifecycle. 
-The Docker client consists of the \texttt{docker} command, followed by a subcommand specifying the action to be performed on Docker host entities. 
-These commands are forwarded to the Docker daemon through a REST API and are partially shown in the diagram. For example, a typical Docker workflow foresees the client asking the daemon to pull an image from a remote registry with \texttt{docker pull} and then instantiate a container from that image with \texttt{docker run}. 
+Figure \ref{fig:docker_architecture} provides a high-level overview of the Docker architecture. The diagram shows a Docker client, a Docker host and a Docker registry. All these entities can be located on the same physical machine or not. 
+The Docker host is the core of the entire architecture, namely the system in which containers are run. By hosting the container engine (daemon) and runtime, the Docker host runs several user-space processes responsible for managing the entire container lifecycle.
+The Docker client is a command-line or graphical interface that allows users to interact with the Docker host by sending REST API requests to the docker daemon. A typical Docker workflow foresees developers using a docker client to push a custom image to a registry with \texttt{docker push} and operations engineers to pull the same image with \texttt{docker pull}, later instantiating production containers from it with \texttt{docker run}.
 The client-daemon REST API leverages UNIX sockets or network interfaces, depending whether the client and daemon are running on the same machine or not.
 The Docker daemon consists of the \texttt{dockerd} process that, by running in the Docker host user space, listens for API requests from Docker clients and manages Docker images, containers, networks and volumes accordingly. 
 The Docker container runtime operates at the lowest level, still in the user space. As explained, it interfaces with the host OS kernel to start and stop containers by managing all OS constructs such as \texttt{namespace} and \texttt{cgroups}.
 The runtime is implemented in a tiered fashion. The low-level runtime, \texttt{runc}, is the reference implementation of the OCI runtime specification. Its duty is to interface with the underlying Linux host kernel to start and stop containers. The high level runtime, \texttt{containerd}, manages the entire container lifecycle, including pulling images from registries and managing \texttt{runc} instances. \newline
 A typical Docker installation has a single \texttt{containerd} process instructing \texttt{runc} to start and stop containers. \texttt{runc} processes are typically short-lived, terminating as soon as a container is started or stopped.
 \texttt{dockerd} is located above \texttt{containerd} and performs higher-level tasks such as exposing the Docker REST API, managing images, networks and volumes. 
-Docker provides also basic orchestration tools, such as \texttt{docker-compose} and \texttt{docker swarm}, depicted as the orchestration layer in the figure.
+Docker provides also basic container orchestration tools, such as \texttt{docker-compose} and \texttt{docker swarm}, depicted as the orchestration layer in the figure.
 
 \begin{figure}[htbp]
     \vspace{10pt}
     \centering
-    \includegraphics[width=1\textwidth]{assets/docker_architecture.pdf}
+    \includegraphics[width=1\textwidth]{assets/docker.pdf}
     \caption{Docker architecture}
     \label{fig:docker_architecture}
     \vspace{10pt}
 \end{figure}
 
-\subsection{Docker application deployment}
-With the adoption of Docker, the traditional deployment process described in figure \ref{fig:traditional_deployment} has been radically simplified:
+\subsection{Single-container application deployment}
+With the adoption of Docker, the traditional deployment process described in figure \ref{fig:traditional_deployment} has been radically simplified. The discussion that follows describes each step of an application component deployment while figure \ref{fig:multi_container_deployment} provides a schematic overview of the process.
 
 \begin{enumerate}
-    \item Developers build the Docker image and ship it to a Docker registry.
-    \item Operation engineers provide configuration details and provision resources to the containers.
-    \item Developers trigger deployment.
+    \item Developers test the the application code to be deployed (with all the dependencies it needs) by running it in a containerized testing environment. 
+    \item When the application works as expected, Developers create a Dockerfile, namely a text file containing all the instructions needed by the Docker engine to package the application in a Docker image. The Dockerfile usually specifies the base image to be used, where to copy application files, which commands to execute to install dependencies and how to start and run the application.
+    \item Developers build the Docker image by using the \texttt{docker build} command and the information contained in the Dockerfile.
+    \item Before pushing the image to a Docker registry, developers test the image by instantiating a container from it in a testing environment. Then, they tag the image with a unique identifier by using the \texttt{docker tag} command.
+    \item Developers push the image to a Docker registry by using the \texttt{docker push} command.
+    \item Operations engineers pull the image from the registry by using the \texttt{docker pull} command, usually specifying its tag. 
+    \item Operations engineers instantiate a production container from the image by using the \texttt{docker run} command, providing additional configuration details such as environment variables, network settings, volume mounts, etc.
 \end{enumerate}
 
-In a nutshell, developers test each application component by running a container in a testing environment. Once the component is well-tested, it's shared to the operation team as a Docker image, using a Docker registry. Both of the two teams can be sure they are dealing with exactly the same artifact, containing the same application component and the same dependencies.
-The operation team instantiate a container from the image and runs the container in production after providing the configuration details it needs.
+In a nutshell, developers test the application component by running a container in a testing environment. Once the component is well-tested, it's shared to the operations team using a Docker registry and as a Docker image, then is deployed to production. Both of the two teams can be sure they are dealing with exactly the same artifact, containing the same application component and the same dependencies.
+It's worth noting that this description is closer to the typical Docker deployment workflow rather than a real-world deployment process. In such a scenario, the deployment process usually involves creating an automated CI/CD pipeline, from code version control to production deployment. 
+Moreover, the distinction between development and operations teams is more nuanced, as the two teams often work together in a DevOps fashion.
 
 \begin{figure}[htbp]
     \vspace{10pt}
     \centering
-    \includegraphics[width=1\textwidth]{assets/deployment_docker.pdf}
-    \caption{Docker deployment process}
-    \label{fig:docker_deployment}
+    \includegraphics[width=1\textwidth]{assets/single_container_deployment.pdf}
+    \caption{Deployment process of a single-container application}
+    \label{fig:single_container_deployment}
     \vspace{10pt}
 \end{figure}
 
+\subsection{Microservices application deployment}
+As discussed in previous sections, complex applications are deployed as a set of microservices, each running in a separate container. This approach allows to scale and update each component independently and aims at providing a higher security level by isolating each service from the others. \newline
+The discussion that follows describes each step of a microservices application deployment while figure \ref{fig:multi_container_deployment} provides a schematic overview of the process.
+The application to be deployed is composed of three microservices, namely a Python frontend, a Python backend and a MySQL database.  
+
+\begin{enumerate}
+    \item Developers test each application component in isolation by running it (with all the dependencies it needs) in a separate containerized testing environment. This phase is close to unit testing. 
+    \item When each application component works as expected, Developers create a Dockerfile for each of them.
+    \item Developers build a Docker image for each application component by using the \texttt{docker build} command and the information contained in the Dockerfile.
+    \item Before pushing each image to a Docker registry, Developers test the entire application by running all its components together, often using tools such as \texttt{docker-compose} to orchestrate the containers. As it involves the interaction between different microservices, this phase is close to integration testing.
+    When the application works as expected, developers tag each image with a unique identifier by using the \texttt{docker tag} command.
+    \item Developers push the images to a Docker registry by using the \texttt{docker push} command.
+    \item Operations engineers pull the images from the registry by using the \texttt{docker pull} command, specifying a tag for each microservice. 
+    \item Operations engineers instantiate production containers from the images by using the \texttt{docker run} command. They provide additional configuration details to each service, such as environment variables, network settings, volume mounts, etc. The application is finally deployed by orchestrating the containers, usually orchestration tools like \texttt{docker-compose}\texttt{docker swarm} or Kubernetes.
+\end{enumerate}
+
+\begin{figure}[htbp]
+    \vspace{10pt}
+    \centering
+    \includegraphics[width=1\textwidth]{assets/multi_container_deployment.pdf}
+    \caption{Deployment process of a microservices application}
+    \label{fig:multi_container_deployment}
+    \vspace{10pt}
+\end{figure}
+
+\subsection{Dockerfiles and layered images}
+As previously mentioned, Dockerfiles are text files that describe the application component to be deployed and its dependencies in an easy-to-read format \cite{poultonDockerDeepDive2023}. For this reason, they are valuable assets both in application deployment and documentation.
+
+The most evident image feature emerging from  Dockerfiles resides in their layered nature. 
+By using Union File Systems (UFS), their file-system exhibit profound differences from a traditional one: images are structured in several layers, each one acting as an immutable "differential filesystem snapshot" with respect to the previous one. Diving into the details, a custom Docker image is created from a base one, namely a minimal Linux distribution (such as Alpine or Ubuntu), acting as layer 0 and containing the clean OS filesystem. Every instruction in the Dockerfile creates a new filesystem layer, encoding the differences between the new filesystem content (or state) and the previous one. For example, layer 1 may differ from layer 0 by containing a new file, layer 2 may differ from layer 1 by containing a new directory, and so on.
+This layered structure allows Docker to cache intermediate layers and to share common layers between different images, reducing the overall image storage footprint and speeding up the build process. 
+Moreover, layers allow for a finer-grade control over image files: when pushing or pulling images to or from a registry, only the changed layers are transferred, reducing the network overhead and speeding up the entire process. Ultimately, layer's immutability assures that image consistency across all environments, from development to production.
+
+Listing \ref{lst:dockerfile} contains a very simple Dockerfile for packing a Python application in a Docker image. 
+Since the Dockerfile contains four instructions, the resulting image will be composed of four layers. With the exception of layer 0, each layer contains only files and directories differing from those in the previous one: layer 1 contains all the updates to the Ubuntu base image, layer 2 the Python installation and layer 3 the application files.
+
+\vspace{10pt}
+\begin{lstlisting}[language=Python, caption = Example of a simple Dockerfile, label = lst:dockerfile]
+    FROM ubuntu:latest
+    RUN apt-get update
+    RUN apt-get install -y python3
+    COPY ./app /app
+\end{lstlisting}
+\vspace{10pt}
+
 \subsection{Benefits of Docker}
-The main benefits of Docker:
+This section summarizes the main benefits of Docker:
 \begin{itemize}
-    \item \textbf{Reproducibility and portability}: Docker containers are immutable and can be easily shared as artifacts between different environments, ensuring that the containerized application will run consistently on any machine. An application component is usually deployed as a single container image, which contains all the dependencies and files it needs to run. 
+    \item \textbf{Reproducibility and portability}: Due to their layered structure, Docker images are immutable and can be easily shared between different environments. Containers instantiated from the same Docker image run consistently regardless of the host system. 
+    As a result, an application component packed in a Docker image runs the same way in a developer's machine, in a testing environment and in production.
     \item \textbf{Isolation}: containers are - or should be - isolated from each other and from the host system, reducing the risk of dependency conflicts between applications and granting a good level of security.
     \item \textbf{Resource efficiency by preserving hardware-software abstraction}: containers share the same host OS kernel. For this reason, containerization exhibit a lower overhead with respect to virtualization. Hardware-software abstraction, usually desired in enterprise solutions, is preserved (to a minor extent compared to virtualization technologies).
-    \item \textbf{Scalability}: Docker makes it easier to scale applications, especially if they are deployed by orchestrating microservices. Each service is usually deployed as a group of containers, that can be easily scaled up or down according to the load. 
+    \item \textbf{Scalability}: Docker makes it easier to scale applications, especially if they are deployed by orchestrating microservices. 
     \item \textbf{Low configuration overhead}: Docker simplifies the process of setting up development and production environments, simplifying an error-prone and time-consuming process.
 \end{itemize}
 
-\section{Microservices deployment}
-[Work in progress :)]
 
 
 
